@@ -18,20 +18,45 @@
         <p>Default Content</p>
         </div>
 
-    <div id="main-region1">
 
-    </div>
+    <div class="row">
+        <div class="container">
+            <div class="col-lg-6">
+
+                <div id="main-region1">
+
+                </div>
+                <input type="button" id="btn_submit" value="load Second View" />
+                <input type="button" id="btn_submit2" value="Load First View" />
+            </div>
+
+             
+        </div>
+          
+        </div>
+   
     <div>
-        <input type="button" id="btn_submit" value="Submit" />
+       
 
     </div>
     <script type="text/template" id="static-template">
-        <p style="background-color:yellow; color:black"> Content load on first Call </p>
+        <p style="background-color:yellow; color:black"> <img src="assets/img/image2.jpg" /> </p>
     </script>
 
     <script type="text/template" id="different-static-template">
-        <p style="background-color:blue; color:white">Content loads dynamically by Click of a button</p>
+        <p style="background-color:blue; color:white"><img src="assets/img/image1.jpg" /></p>
     </script>
+
+
+    <script type="text/template" id="third-static-template">
+        <p style="background-color:yellow; color:white">
+
+
+            <img src="assets/img/images2.jpg" />
+            
+        </p>
+    </script>
+   
 
     <script src="./assets/js/vendor/jquery.js" type="text/javascript"></script> 
     <script src="./assets/js/vendor/json2.js" type="text/javascript"></script> 
@@ -44,11 +69,11 @@
     var ContactManager = new Marionette.Application();
 
     ContactManager.addRegions({
-        mainRegion: "#main-region1",
+        mainRegion: "#main-region1"        
         
     });
 
-    ContactManager.StaticView = Marionette.ItemView.extend({
+    ContactManager.StaticView = Marionette.ItemView.extend({ 
         template: "#static-template"
     });
 
@@ -67,6 +92,14 @@
         $("#btn_submit").click(function () {
             var staticView = new ContactManager.StaticView({
                 template: "#different-static-template"
+            })
+            ContactManager.mainRegion.show(staticView);
+        });
+
+        $("#btn_submit2").click(function () {
+            
+            var staticView = new ContactManager.StaticView({
+                template: "#static-template"
             })
             ContactManager.mainRegion.show(staticView);
         });
