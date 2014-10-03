@@ -17,6 +17,19 @@
     <div class="container" id="main-region">
      
     </div>
+    <!--This template is used as a table header-->
+    <script type="text/template" id="contact-list-headers">
+        <tr><th style="border-right: solid 1px #f1efef; padding-left:5px;">First Name</th><th style="border-right: solid 1px #f1efef; padding-left:5px;">Last Name</th><th style="border-right: solid 1px #f1efef; padding-left:5px;">Phone Number</th><th></th>  </tr>
+    </script>
+
+    <!--This template is used for the body of table-->
+    <script type="text/template" id="contact-list-item">
+        <td><input type="text" value="<%- firstName %>" /></td>
+        <td><input type="text" value="<%- lastName %>" /> </td>
+        <td> <input type="tel" value="<%-phoneNumber%>"></td>
+        <td><input type="button" value="Send" class="btn btn-success" /></td>
+    </script>
+
 
     <script src="./assets/js/vendor/jquery.js" type="text/javascript"></script>
     <script src="./assets/js/vendor/json2.js" type="text/javascript"></script>
@@ -32,17 +45,60 @@
 
     });
     ContactManager.module("Entities", function (Entities, ContactManager, Backbone, Marionette, $, _) {
-        var alertPrivate = function (message) {
-            alert("Private alert: " + message);
-        };
-        Entities.alertPublic = function (message) {
-            alert("I will now call alertPrivate");
-            alertPrivate(message);
+       
+        Entities.Contact = Backbone.Model.extend({});
+        Entities.ContactCollection = Backbone.Collection.extend({
+            model: Entities.Contact,
+            comparator: "firstName"
+        });
+
+        Entities.ContactItemView = Marionette.ItemView.extend({
+            tagName: "tr",
+            template: "#contact-list-item"
+        })
+
+        Entities.ContactsView = Marionette.CompositeView.extend({
+            tagName: "table",
+            template: "#contact-list-headers",
+            childView: Entities.ContactItemView,
+            itemViewContainer: "tbody",
+            className: "table table-bordered"
+        });
+        var contacts = new Entities.ContactCollection(
+            [{
+                firstName: "hector",
+                lastName: "Pacheco",
+                phoneNumber: "718-758-0001"
+            },
+        {
+            firstName: "Jeffrey",
+            lastName: "Pacheco",
+            phoneNumber: "718-758-0002"
+        },
+        {
+            firstName: "Roko",
+            lastName: "Pacheco",
+            phoneNumber: "718-758-0003"
+        },
+        {
+            firstName: "Max",
+            lastName: "Pacheco",
+            phoneNumber: "718-758-0004"
         }
+
+            ]
+            );
+
+        var contactListView = new Entities.ContactsView({
+            collection: contacts
+        });
+
+        ContactManager.mainRegion.show(contactListView);
+
 
     });
 
-    ContactManager.Entities.alertPublic("Hello");
+    ContactManager.Entities.start();
 
     </script>
 
