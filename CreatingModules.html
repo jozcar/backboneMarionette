@@ -5,6 +5,11 @@
     <title>Marionette Contact Manager</title>
     <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="./assets/css/application.css" rel="stylesheet" />
+    <style>
+    .warning{
+      background-color: red;
+    }
+    </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -15,7 +20,7 @@
         </div>
     </div>
     <div class="container" id="main-region">
-     
+
     </div>
     <!--This template is used as a table header-->
     <script type="text/template" id="contact-list-headers">
@@ -27,7 +32,15 @@
         <td><input type="text" value="<%- firstName %>" /></td>
         <td><input type="text" value="<%- lastName %>" /> </td>
         <td> <input type="tel" value="<%-phoneNumber%>"></td>
-        <td><input type="button" value="Send" class="btn btn-success" /></td>
+        <td>
+
+        <button class="btn btn-small">
+<i class="icon-remove"></i>
+
+</button>
+
+
+        </td>
     </script>
 
 
@@ -45,7 +58,7 @@
 
     });
     ContactManager.module("Entities", function (Entities, ContactManager, Backbone, Marionette, $, _) {
-       
+
         Entities.Contact = Backbone.Model.extend({});
         Entities.ContactCollection = Backbone.Collection.extend({
             model: Entities.Contact,
@@ -54,7 +67,16 @@
 
         Entities.ContactItemView = Marionette.ItemView.extend({
             tagName: "tr",
-            template: "#contact-list-item"
+            template: "#contact-list-item",
+            events: {
+              "click" : "highlightName",
+              "click button": function (){
+                alert(this.model.attributes.firstName);
+              }
+            },
+            highlightName: function(e){
+              this.$el.toggleClass("warning");
+            }
         })
 
         Entities.ContactsView = Marionette.CompositeView.extend({
